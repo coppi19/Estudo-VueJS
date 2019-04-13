@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Teste VueJs</title>
+</head>
+<body>
+<div id="app">
+	<h1>{{tittle}}</h1>
+	<input type="text" v-model="text">
+	<input type="button" v-on:click.parent="add()" value="Botão">
+	<ol>
+		<li v-for="(value, key) in list">
+			<span>{{value.text}}</span>
+			<button v-on:click="excluir(key)">X</button>
+		</li>
+	</ol>
+</div>
+<script src="https://br.vuejs.org/js/vue.min.js"></script>
+<script type="text/javascript">
+	new Vue({
+		el: '#app',
+		data: {
+			text: '',
+			tittle: 'Teste de VueJS',
+			list: [{text: 'Insira:'}]
+		},
+		methods: {
+			add(){
+				this.list.push({text: this.text})
+				this.text = ''
+			},
+			excluir(index){
+				this.list.splice(index,1)
+			}
+
+		}
+	})
+</script>
+</body>
+</html>
