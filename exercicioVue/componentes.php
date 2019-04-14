@@ -16,6 +16,14 @@
 	<div id="app">
 
 		<h4 class="text-center">{{tittle}}</h4>
+
+		<!-- validacao -->
+		<div v-bind:class="{'alert alert-success text-center': yes , 'alert alert-danger text-center' : no}" role="alert" v-show="validation">
+  			{{msg}}
+		</div>
+
+		<!-- validacao -->
+
 		<div class="container">
 			<div class="card">
 				<div class="card-block">
@@ -49,7 +57,7 @@
 				<div class="card-block">
 					<div class="form-group">
 						<label for="">{{edicao}}</label>
-						<input type="text" class="form-control" v-model="elementoEdit.nome" value="{{elementoEdit.nome}}">
+						<input type="text" class="form-control" v-model="elementoEdit.nome" value="{{elementoEdit.nome}}" v-on:keyup.enter="editou()">
 						<button class="btn btn-primary" v-on:click="editou()" >Editar</button>
 					</div>	
 				</div>
@@ -66,10 +74,16 @@
 			controler: false, //controler variavel para exibir ou não a lista 
 			textEdit: false, //controler variavel para exibir ou nao campo de edicao
 			btnSalvarLista: false, //controler botao de salvar
+			validation: false,
+			yes: false,
+			no: false,
+			activeClass: 'alert alert-success text-center',
+  			errorClass: 'alert alert-danger text-center',
 			btnSalvarText: 'Salvar lista',
 			tittle: 'Estudo  Componentes VUE.JS + PHP',
 			edicao: 'Edite o item',
 			titulo: 'Título',
+			msg: '',
 			elementoEdit: {
 				id : '',
 				nome : ''
@@ -84,7 +98,10 @@
 					this.controler = true //mostra lista
 					this.btnSalvarLista = true
 				}else{
-					alert('Preencha corretamente');
+						this.msg = 'Preencha os campos corretamente' 
+						this.no = true;
+						this.validation = true
+						setTimeout(function () { this.validation = false }.bind(this), 800)
 				}
 			},
 			excluir(index){
@@ -109,6 +126,15 @@
 			editou(){
 				this.list.splice(this.elementoEdit.id,1)
 				this.list.push({text: this.elementoEdit.nome})
+				this.msg = 'Editado com sucesso'
+				this.yes = true
+				this.validation = true
+				setTimeout(function () {
+					this.validation = false
+					this.exit()
+				 }.bind(this), 800)
+
+
 			},
 			salvarLista(){
 			}
