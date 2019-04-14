@@ -28,11 +28,12 @@
 			</div>
 
 			<br><br><br><br>
-			<div class="card col-sm-12" id="card-list" style="width: 18rem;" v-if="controler">
+
+			<div class="card col-sm-12" id="card-list" v-if="controler">
 				<ul class="list-group list-group-flush" >
 					<li class="list-group-item" v-for="(value, key) in list" v-if="value.text != ''">
 						<b>{{value.text}}</b>
-						<a href="" v-on:click.prevent="editar(key)"> <img src="exercicioVue/img/pencil.ico" height="42" width="42"> </a>
+						<a href="" v-on:click.prevent="editar(key)"> <img src="img/pencil.ico" height="42" width="42"> </a>
 						<button type="button" class="btn btn-danger" v-on:click="excluir(key)">X</button>
 					</li>
 				</ul>
@@ -41,11 +42,12 @@
 			<br><br>
 
 			<div class="card" v-show="textEdit">
+				<span><a href="" v-on:click.prevent="exit()">X</a></span>
 				<div class="card-block">
 					<div class="form-group">
 						<label for="">{{edicao}}</label>
-						<input type="text" class="form-control" >
-						<button class="btn btn-primary" v-model="editou" >Editar</button>	 
+						<input type="text" class="form-control" v-model="elementoEdit.nome" value="{{elementoEdit.nome}}">
+						<button class="btn btn-primary" v-on:click="editou()" >Editar</button>
 					</div>	
 				</div>
 			</div>
@@ -64,7 +66,10 @@
 			tittle: 'Estudo  Componentes VUE.JS + PHP',
 			edicao: 'Edite o item',
 			titulo: 'Título',
-			editou: [{editar: ''}],
+			elementoEdit: {
+				id : '',
+				nome : ''
+			}, 
 			list: [{text: ''}]
 		},
 		methods: {
@@ -73,6 +78,8 @@
 					this.list.push({text: this.campo})
 					this.campo = ''
 					this.controler = true //mostra lista
+				}else{
+					alert('Preencha corretamente');
 				}
 			},
 			excluir(index){
@@ -81,10 +88,20 @@
 				{
 					this.controler = false //caso não tenha mais elementos, esconde a lista
 				}
+				this.textEdit = false;
 				
+			},
+			exit(){
+			 this.textEdit = false //desaparece campo para editar elemento da lista
 			},
 			editar(index){
 				this.textEdit = true //aparecer campo para editar elemento da lista
+				this.elementoEdit.id = index
+				this.elementoEdit.nome = this.list[index].text
+			},
+			editou(){
+				this.list.splice(this.elementoEdit.id,1)
+				this.list.push({text: this.elementoEdit.nome})
 			}
 
 
