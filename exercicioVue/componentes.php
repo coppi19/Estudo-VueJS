@@ -23,7 +23,8 @@
 						<label for="">{{titulo}}</label>
 						<input type="text" class="form-control" v-model="campo" v-on:keyup.enter="add()">
 					</div>
-					<button class="btn btn-primary" v-on:click="add()" >ENVIAR</button>	 
+					<button class="btn btn-primary" v-on:click="add()" >ENVIAR</button>
+					<button  v-if="btnSalvarLista" v-on:click="salvarLista()" class="btn btn-success">{{btnSalvarText}}</button>	 
 				</div>
 			</div>
 
@@ -33,8 +34,10 @@
 				<ul class="list-group list-group-flush" >
 					<li class="list-group-item" v-for="(value, key) in list" v-if="value.text != ''">
 						<b>{{value.text}}</b>
-						<a href="" v-on:click.prevent="editar(key)"> <img src="img/pencil.ico" height="42" width="42"> </a>
-						<button type="button" class="btn btn-danger" v-on:click="excluir(key)">X</button>
+						<div id="MenuLateral">
+							<a href="" v-on:click.prevent="editar(key)"> <img src="img/pencil.ico" height="42" width="42"> </a>
+							<button type="button" class="btn btn-danger" v-on:click="excluir(key)">X</button>
+						</div>	
 					</li>
 				</ul>
 			</div>
@@ -51,18 +54,19 @@
 					</div>	
 				</div>
 			</div>
-
+			
 		</div>
-
 	</div>
 	<script src="https://br.vuejs.org/js/vue.min.js"></script>
 	<script type="text/javascript">
 		var instancia = new Vue({
 			el: '#app',
 			data: {
-				campo: '',
+			campo: '',
 			controler: false, //controler variavel para exibir ou não a lista 
 			textEdit: false, //controler variavel para exibir ou nao campo de edicao
+			btnSalvarLista: false, //controler botao de salvar
+			btnSalvarText: 'Salvar lista',
 			tittle: 'Estudo  Componentes VUE.JS + PHP',
 			edicao: 'Edite o item',
 			titulo: 'Título',
@@ -70,7 +74,7 @@
 				id : '',
 				nome : ''
 			}, 
-			list: [{text: ''}]
+			list: [{text: []}]
 		},
 		methods: {
 			add(){
@@ -78,6 +82,7 @@
 					this.list.push({text: this.campo})
 					this.campo = ''
 					this.controler = true //mostra lista
+					this.btnSalvarLista = true
 				}else{
 					alert('Preencha corretamente');
 				}
@@ -87,6 +92,7 @@
 				if (this.list.length == 1)
 				{
 					this.controler = false //caso não tenha mais elementos, esconde a lista
+					this.btnSalvarLista = false
 				}
 				this.textEdit = false;
 				
@@ -99,9 +105,12 @@
 				this.elementoEdit.id = index
 				this.elementoEdit.nome = this.list[index].text
 			},
+			//salva elemento no array para mostrar a edicao
 			editou(){
 				this.list.splice(this.elementoEdit.id,1)
 				this.list.push({text: this.elementoEdit.nome})
+			},
+			salvarLista(){
 			}
 
 
